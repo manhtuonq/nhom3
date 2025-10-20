@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8eef5 100%);
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .phone-frame {
+            width: 400px;
+            height: 850px;
+            background: white;
+            border-radius: 40px;
+            padding: 10px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+        }
+
+        .screen {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #f8f9fc 0%, #ffffff 100%);
+            border-radius: 32px;
+            overflow-y: auto;
+            padding-bottom: 80px;
+            position: relative;
+        }
+
+        .screen::-webkit-scrollbar {
+            width: 0;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            padding: 20px;
+            color: white;
+            border-radius: 0 0 24px 24px;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .header-user {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .greeting {
+            font-size: 12px;
+            opacity: 0.95;
+            margin-bottom: 2px;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .notification-badge {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .notification-badge:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Timeline */
+        .timeline {
+            background: white;
+            border-radius: 16px;
+            padding: 16px;
+            margin: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .timeline-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 12px;
+        }
+
+        .timeline-bar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .time-point {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .battery-icon {
+            width: 20px;
+            height: 12px;
+            border: 1.5px solid #8b5cf6;
+            border-radius: 2px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            padding: 2px;
+        }
+
+        .battery-icon::after {
+            content: '';
+            position: absolute;
+            right: -3px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 2px;
+            height: 6px;
+            background: #8b5cf6;
+            border-radius: 0 2px 2px 0;
+        }
+
+        .battery-fill {
+            width: 100%;
+            height: 100%;
+            background: #8b5cf6;
+            border-radius: 1px;
+        }
+
+        .timeline-line {
+            flex: 1;
+            height: 2px;
+            background: #e5e7eb;
+            border-radius: 1px;
+            position: relative;
+        }
+
+        .timeline-line::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 50%;
+            height: 100%;
+            background: #8b5cf6;
+            border-radius: 1px;
+        }
+
+        .timeline-line::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 8px;
+            height: 8px;
+            background: #8b5cf6;
+            border-radius: 50%;
+        }
+
+        /* Content Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            padding: 0 16px;
+            margin: 16px 0;
+        }
+
+        /* Calendar Card */
+        .calendar-card {
+            background: white;
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .calendar-month {
+            font-size: 11px;
+            font-weight: 600;
+            color: #ef4444;
+            text-transform: uppercase;
+        }
+
+        .calendar-nav {
+            display: flex;
+            gap: 8px;
+        }
+
+        .nav-btn {
+            width: 20px;
+            height: 20px;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 10px;
+            color: #6b7280;
+        }
+
+        .calendar-days-header {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 2px;
+            margin-bottom: 4px;
+        }
+
+        .day-header {
+            text-align: center;
+            font-size: 9px;
+            color: #9ca3af;
+            padding: 4px 0;
+        }
+
+        .calendar-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 2px;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .calendar-day:hover {
+            background: #f3f4f6;
+        }
+
+        .calendar-day.empty {
+            cursor: default;
+        }
+
+        .calendar-day.today {
+            background: #3b82f6;
+            color: white;
+            font-weight: 600;
+        }
+
+        .calendar-day.attended {
+            background: #10b981;
+            color: white;
+            font-weight: 500;
+        }
+
+        .calendar-day.weekend {
+            color: #ef4444;
+        }
+
+        /* Week Schedule Card */
+        .schedule-card {
+            background: white;
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .schedule-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .schedule-title {
+            font-size: 11px;
+            font-weight: 600;
+            color: #ef4444;
+            text-transform: uppercase;
+        }
+
+        .week-number {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        .schedule-grid {
+            display: grid;
+            grid-template-columns: 30px 1fr;
+            gap: 4px;
+            font-size: 9px;
+        }
+
+        .time-label {
+            text-align: right;
+            padding-right: 4px;
+            color: #6b7280;
+            font-size: 8px;
+            padding-top: 2px;
+        }
+
+        .schedule-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .schedule-row {
+            display: flex;
+            gap: 2px;
+            height: 16px;
+        }
+
+        .schedule-block {
+            flex: 1;
+            border-radius: 3px;
+            font-size: 7px;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 500;
+        }
+
+        .block-morning {
+            background: #8b5cf6;
+        }
+
+        .block-afternoon {
+            background: #a78bfa;
+        }
+
+        .block-leave {
+            background: #06b6d4;
+        }
+
+        /* Revenue Chart */
+        .chart-card {
+            background: white;
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            grid-column: 1 / -1;
+        }
+
+        .chart-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .chart-icon {
+            color: #10b981;
+        }
+
+        .chart-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .chart-subtitle {
+            font-size: 11px;
+            color: #6b7280;
+        }
+
+        .chart-container {
+            height: 150px;
+            position: relative;
+        }
+
+        #revenueChart {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Notifications */
+        .notifications-section {
+            padding: 0 16px;
+            margin: 20px 0;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 12px;
+        }
+
+        .notification-card {
+            background: white;
+            border-radius: 12px;
+            padding: 12px;
+            display: flex;
+            gap: 12px;
+            margin-bottom: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .notification-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .notification-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .notification-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 2px;
+        }
+
+        .notification-text {
+            font-size: 11px;
+            color: #6b7280;
+            line-height: 1.4;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 360px;
+            background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%);
+            border-radius: 24px;
+            padding: 8px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            box-shadow: 0 4px 16px rgba(139, 92, 246, 0.2);
+        }
+
+        .nav-item {
+            width: 60px;
+            height: 48px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #9ca3af;
+            cursor: pointer;
+            border-radius: 16px;
+            transition: all 0.3s;
+            gap: 4px;
+        }
+
+        .nav-item:hover {
+            color: #8b5cf6;
+        }
+
+        .nav-item.active {
+            background: #8b5cf6;
+            color: white;
+        }
+
+        .nav-item svg {
+            width: 20px;
+            height: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <div class="screen">
+            <!-- Header -->
+            <div class="header">
+                <div class="header-top">
+                    <div class="header-user">
+                        <div class="avatar">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </div>
+                        <div class="user-info">
+                            <div class="greeting">Chào buổi sáng 01/10/2025</div>
+                            <div class="user-name">Nguyễn Văn A: 023456</div>
+                        </div>
+                    </div>
+                    <div class="notification-badge">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Timeline -->
+            <div class="timeline">
+                <div class="timeline-title">Hành chính</div>
+                <div class="timeline-bar">
+                    <div class="time-point">
+                        8:00
+                        <div class="battery-icon">
+                            <div class="battery-fill"></div>
+                        </div>
+                    </div>
+                    <div class="timeline-line"></div>
+                    <div class="time-point">
+                        <div class="battery-icon">
+                            <div class="battery-fill"></div>
+                        </div>
+                        17:00
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Grid -->
+            <div class="content-grid">
+                <!-- Calendar -->
+                <div class="calendar-card">
+                    <div class="calendar-header">
+                        <div class="calendar-month">Tháng 10</div>
+                        <div class="calendar-nav">
+                            <div class="nav-btn">◀</div>
+                            <div class="nav-btn">▶</div>
+                        </div>
+                    </div>
+                    <div class="calendar-days-header">
+                        <div class="day-header">T2</div>
+                        <div class="day-header">T3</div>
+                        <div class="day-header">T4</div>
+                        <div class="day-header">T5</div>
+                        <div class="day-header">T6</div>
+                        <div class="day-header">T7</div>
+                        <div class="day-header">CN</div>
+                    </div>
+                    <div class="calendar-days">
+                        <div class="calendar-day empty"></div>
+                        <div class="calendar-day empty"></div>
+                        <div class="calendar-day today">1</div>
+                        <div class="calendar-day attended">2</div>
+                        <div class="calendar-day attended">3</div>
+                        <div class="calendar-day weekend">4</div>
+                        <div class="calendar-day weekend">5</div>
+                        <div class="calendar-day attended">6</div>
+                        <div class="calendar-day attended">7</div>
+                        <div class="calendar-day attended">8</div>
+                        <div class="calendar-day today">9</div>
+                        <div class="calendar-day">10</div>
+                        <div class="calendar-day weekend">11</div>
+                        <div class="calendar-day weekend">12</div>
+                        <div class="calendar-day attended">13</div>
+                        <div class="calendar-day attended">14</div>
+                        <div class="calendar-day attended">15</div>
+                        <div class="calendar-day attended">16</div>
+                        <div class="calendar-day attended">17</div>
+                        <div class="calendar-day weekend">18</div>
+                        <div class="calendar-day weekend">19</div>
+                        <div class="calendar-day">20</div>
+                        <div class="calendar-day attended">21</div>
+                        <div class="calendar-day attended">22</div>
+                        <div class="calendar-day attended">23</div>
+                        <div class="calendar-day attended">24</div>
+                        <div class="calendar-day weekend">25</div>
+                        <div class="calendar-day weekend">26</div>
+                        <div class="calendar-day attended">27</div>
+                        <div class="calendar-day attended">28</div>
+                        <div class="calendar-day attended">29</div>
+                        <div class="calendar-day empty"></div>
+                        <div class="calendar-day">31</div>
+                    </div>
+                </div>
+
+                <!-- Week Schedule -->
+                <div class="schedule-card">
+                    <div class="schedule-header">
+                        <div class="schedule-title">Thứ năm</div>
+                        <div class="week-number">9</div>
+                    </div>
+                    <div class="schedule-grid">
+                        <div class="time-label">Thứ 2</div>
+                        <div class="schedule-row">
+                            <div class="schedule-block block-morning">8h-12h</div>
+                            <div class="schedule-block block-afternoon">13h-17h</div>
+                        </div>
+                        
+                        <div class="time-label">Thứ 3</div>
+                        <div class="schedule-row">
+                            <div class="schedule-block block-morning">8h-12h</div>
+                            <div class="schedule-block block-afternoon">13h-17h</div>
+                        </div>
+                        
+                        <div class="time-label">Thứ 4</div>
+                        <div class="schedule-row">
+                            <div class="schedule-block block-morning">8h-12h</div>
+                            <div class="schedule-block block-afternoon">13h-17h</div>
+                        </div>
+                        
+                        <div class="time-label">Thứ 5</div>
+                        <div class="schedule-row">
+                            <div class="schedule-block block-leave">Nghỉ phép</div>
+                        </div>
+                        
+                        <div class="time-label">Thứ 6</div>
+                        <div class="schedule-row">
+                            <div class="schedule-block block-morning">8h-12h</div>
+                            <div class="schedule-block block-afternoon">13h-17h</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Revenue Chart -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <svg class="chart-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                        </svg>
+                        <div>
+                            <div class="chart-title">Doanh thu</div>
+                            <div class="chart-subtitle">Doanh thu tháng</div>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notifications -->
+            <div class="notifications-section">
+                <div class="section-title">Thông báo</div>
+                
+                <div class="notification-card">
+                    <div class="notification-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                            <circle cx="12" cy="10" r="3"></circle>
+                        </svg>
+                    </div>
+                    <div class="notification-content">
+                        <div class="notification-title">Ra mắt tính năng chấm công bằng GPS</div>
+                        <div class="notification-text">Chấm công dễ dàng hơn với công nghệ định vị GPS</div>
+                    </div>
+                </div>
+
+                <div class="notification-card">
+                    <div class="notification-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                        </svg>
+                    </div>
+                    <div class="notification-content">
+                        <div class="notification-title">CV đề lọt vào mắt nhà tuyển dụng</div>
+                        <div class="notification-text">Hướng dẫn tạo CV ấn tượng và chuyên nghiệp</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+            <div class="nav-item active">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                </svg>
+            </div>
+            <div class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+            </div>
+            <div class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M12 1v6m0 6v6m7.07-12.07l-4.24 4.24m-5.66 5.66l-4.24 4.24m18.38 0l-4.24-4.24m-5.66-5.66L1.93 1.93"></path>
+                </svg>
+            </div>
+            <div class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Navigation
+        const navItems = document.querySelectorAll('.nav-item');
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                navItems.forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+            });
+        });
+
+        // Simple Revenue Chart
+        const canvas = document.getElementById('revenueChart');
+        const ctx = canvas.getContext('2d');
+        
+        function drawChart() {
+            const width = canvas.offsetWidth;
+            const height = canvas.offsetHeight;
+            canvas.width = width;
+            canvas.height = height;
+
+            const data = [30, 35, 32, 40, 45, 42, 50, 55, 52, 60, 65, 70, 75, 72, 80, 85, 90, 95, 92, 100];
+            const max = Math.max(...data);
+            const padding = 20;
+            const chartHeight = height - padding * 2;
+            const chartWidth = width - padding * 2;
+            const stepX = chartWidth / (data.length - 1);
+
+            // Draw line
+            ctx.beginPath();
+            ctx.strokeStyle = '#10b981';
+            ctx.lineWidth = 2;
+            
+            data.forEach((value, index) => {
+                const x = padding + index * stepX;
+                const y = height - padding - (value / max) * chartHeight;
+                
+                if (index === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            });
+            ctx.stroke();
+
+            // Draw gradient fill
+            const gradient = ctx.createLinearGradient(0, padding, 0, height - padding);
+            gradient.addColorStop(0, 'rgba(16, 185, 129, 0.2)');
+            gradient.addColorStop(1, 'rgba(16, 185, 129, 0)');
+            
+            ctx.lineTo(width - padding, height - padding);
+            ctx.lineTo(padding, height - padding);
+            ctx.closePath();
+            ctx.fillStyle = gradient;
+            ctx.fill();
+
+            // Draw points
+            data.forEach((value, index) => {
+                const x = padding + index * stepX;
+                const y = height - padding - (value / max) * chartHeight;
+                
+                ctx.beginPath();
+                ctx.arc(x, y, 3, 0, Math.PI * 2);
+                ctx.fillStyle = '#10b981';
+                ctx.fill();
+            });
+        }
+
+        drawChart();
+        window.addEventListener('resize', drawChart);
+    </script>
+</body>
+</html>

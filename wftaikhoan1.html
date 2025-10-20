@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tài khoản của tôi</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8eef5 100%);
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .phone-frame {
+            width: 400px;
+            height: 850px;
+            background: white;
+            border-radius: 40px;
+            padding: 10px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+        }
+
+        .screen {
+            width: 100%;
+            height: 100%;
+            background: #f8f9fc;
+            border-radius: 32px;
+            overflow-y: auto;
+            padding-bottom: 80px;
+            position: relative;
+        }
+
+        .screen::-webkit-scrollbar {
+            width: 0;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            padding: 20px;
+            color: white;
+            position: relative;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .back-btn {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: 600;
+            flex: 1;
+            text-align: center;
+            margin: 0 10px;
+        }
+
+        .notification-badge {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .notification-badge:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Timeline Card */
+        .timeline-card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin: -30px 20px 20px 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            position: relative;
+            z-index: 10;
+        }
+
+        .timeline-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 4px;
+        }
+
+        .timeline-hours {
+            font-size: 12px;
+            color: #6b7280;
+            margin-bottom: 16px;
+        }
+
+        .timeline-bar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .time-point {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .battery-icon {
+            width: 24px;
+            height: 14px;
+            border: 2px solid #8b5cf6;
+            border-radius: 3px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            padding: 2px;
+        }
+
+        .battery-icon::after {
+            content: '';
+            position: absolute;
+            right: -4px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 3px;
+            height: 8px;
+            background: #8b5cf6;
+            border-radius: 0 2px 2px 0;
+        }
+
+        .battery-fill {
+            width: 100%;
+            height: 100%;
+            background: #8b5cf6;
+            border-radius: 1px;
+        }
+
+        .timeline-line {
+            flex: 1;
+            height: 3px;
+            background: #e5e7eb;
+            border-radius: 2px;
+            position: relative;
+        }
+
+        .timeline-line::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 50%;
+            height: 100%;
+            background: #8b5cf6;
+            border-radius: 2px;
+        }
+
+        .timeline-line::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 10px;
+            height: 10px;
+            background: #8b5cf6;
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+
+        /* Action Cards Container */
+        .actions-container {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin: 0 20px 20px 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Action Grid */
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .action-card {
+            background: linear-gradient(135deg, #e9d5ff 0%, #ddd6fe 100%);
+            border-radius: 16px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            min-height: 120px;
+        }
+
+        .action-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(139, 92, 246, 0.2);
+        }
+
+        .action-icon {
+            width: 48px;
+            height: 48px;
+            background: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #8b5cf6;
+        }
+
+        .action-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #5b21b6;
+            text-align: center;
+            line-height: 1.3;
+        }
+
+        .action-card.export {
+            grid-column: 1 / -1;
+        }
+
+        .action-card.export .action-icon {
+            background: #8b5cf6;
+            color: white;
+        }
+
+        .action-card.export .action-label {
+            color: #7c3aed;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 360px;
+            background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%);
+            border-radius: 24px;
+            padding: 8px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            box-shadow: 0 4px 16px rgba(139, 92, 246, 0.2);
+        }
+
+        .nav-item {
+            width: 60px;
+            height: 48px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #9ca3af;
+            cursor: pointer;
+            border-radius: 16px;
+            transition: all 0.3s;
+            gap: 4px;
+        }
+
+        .nav-item:hover {
+            color: #8b5cf6;
+        }
+
+        .nav-item.active {
+            background: #8b5cf6;
+            color: white;
+        }
+
+        .nav-item svg {
+            width: 22px;
+            height: 22px;
+        }
+
+        .nav-text {
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .nav-item:not(.active) .nav-text {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <div class="screen">
+            <!-- Header -->
+            <div class="header">
+                <div class="header-top">
+                    <div class="back-btn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="15 18 9 12 15 6"></polyline>
+                        </svg>
+                    </div>
+                    <div class="header-title">TÀI KHOẢN CỦA TÔI</div>
+                    <div class="notification-badge">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Timeline Card -->
+            <div class="timeline-card">
+                <div class="timeline-title">Hành chính</div>
+                <div class="timeline-hours">8:00 - 17:00</div>
+                <div class="timeline-bar">
+                    <div class="time-point">
+                        8:00
+                        <div class="battery-icon">
+                            <div class="battery-fill"></div>
+                        </div>
+                    </div>
+                    <div class="timeline-line"></div>
+                    <div class="time-point">
+                        <div class="battery-icon">
+                            <div class="battery-fill"></div>
+                        </div>
+                        17:00
+                    </div>
+                </div>
+            </div>
+
+            <!-- Actions Container -->
+            <div class="actions-container">
+                <div class="action-grid">
+                    <!-- Hồ sơ cá nhân -->
+                    <div class="action-card">
+                        <div class="action-icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </div>
+                        <div class="action-label">Hồ sơ<br>cá nhân</div>
+                    </div>
+
+                    <!-- Bảng lương -->
+                    <div class="action-card">
+                        <div class="action-icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                                <path d="M7 15h0M2 9.5h20"></path>
+                            </svg>
+                        </div>
+                        <div class="action-label">Bảng lương</div>
+                    </div>
+
+                    <!-- Đổi mật khẩu -->
+                    <div class="action-card">
+                        <div class="action-icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                            </svg>
+                        </div>
+                        <div class="action-label">Đổi mật khẩu</div>
+                    </div>
+
+                    <!-- Hỗ trợ -->
+                    <div class="action-card">
+                        <div class="action-icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                                <circle cx="12" cy="11" r="1"></circle>
+                                <circle cx="16" cy="11" r="1"></circle>
+                                <circle cx="8" cy="11" r="1"></circle>
+                            </svg>
+                        </div>
+                        <div class="action-label">Hỗ trợ</div>
+                    </div>
+
+                    <!-- Đăng xuất -->
+                    <div class="action-card export">
+                        <div class="action-icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                <polyline points="16 17 21 12 16 7"></polyline>
+                                <line x1="21" y1="12" x2="9" y2="12"></line>
+                            </svg>
+                        </div>
+                        <div class="action-label">Đăng xuất</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+            <div class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                </svg>
+            </div>
+            <div class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+            </div>
+            <div class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M12 1v6m0 6v6m7.07-12.07l-4.24 4.24m-5.66 5.66l-4.24 4.24m18.38 0l-4.24-4.24m-5.66-5.66L1.93 1.93"></path>
+                </svg>
+            </div>
+            <div class="nav-item active">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                <span class="nav-text">Tài khoản</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Navigation
+        const navItems = document.querySelectorAll('.nav-item');
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                navItems.forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+            });
+        });
+
+        // Back button
+        document.querySelector('.back-btn').addEventListener('click', () => {
+            console.log('Quay lại');
+        });
+
+        // Action cards
+        const actionCards = document.querySelectorAll('.action-card');
+        actionCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const label = card.querySelector('.action-label').textContent.trim();
+                console.log('Clicked:', label);
+            });
+        });
+
+        // Notification badge
+        document.querySelector('.notification-badge').addEventListener('click', () => {
+            console.log('Mở thông báo');
+        });
+    </script>
+</body>
+</html>

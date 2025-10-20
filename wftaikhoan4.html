@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thông tin công việc</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8eef5 100%);
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .phone-frame {
+            width: 400px;
+            height: 850px;
+            background: white;
+            border-radius: 40px;
+            padding: 10px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+        }
+
+        .screen {
+            width: 100%;
+            height: 100%;
+            background: #f8f9fc;
+            border-radius: 32px;
+            overflow-y: auto;
+            padding-bottom: 80px;
+            position: relative;
+        }
+
+        .screen::-webkit-scrollbar {
+            width: 0;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            padding: 20px;
+            color: white;
+            position: relative;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .back-btn {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: 600;
+            flex: 1;
+            text-align: center;
+            margin: 0 10px;
+        }
+
+        .menu-btn {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .menu-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Profile Card */
+        .profile-card {
+            background: white;
+            border-radius: 20px;
+            padding: 24px;
+            margin: -30px 20px 20px 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            position: relative;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            border: 2px solid #e9d5ff;
+        }
+
+        .corner-dot {
+            width: 12px;
+            height: 12px;
+            background: #8b5cf6;
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .corner-dot.top-left {
+            top: -6px;
+            left: -6px;
+        }
+
+        .corner-dot.top-right {
+            top: -6px;
+            right: -6px;
+        }
+
+        .corner-dot.bottom-left {
+            bottom: -6px;
+            left: -6px;
+        }
+
+        .corner-dot.bottom-right {
+            bottom: -6px;
+            right: -6px;
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #e9d5ff 0%, #ddd6fe 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-avatar svg {
+            width: 40px;
+            height: 40px;
+            color: #8b5cf6;
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 4px;
+        }
+
+        .profile-id {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 4px;
+        }
+
+        .profile-email {
+            font-size: 14px;
+            color: #8b5cf6;
+        }
+
+        /* Info Container */
+        .info-container {
+            background: linear-gradient(135deg, #e9d5ff 0%, #ddd6fe 100%);
+            border-radius: 20px;
+            padding: 24px;
+            margin: 0 20px 20px 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(139, 92, 246, 0.1);
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            font-size: 14px;
+            color: #5b21b6;
+            font-weight: 600;
+        }
+
+        .info-value {
+            font-size: 14px;
+            color: #1f2937;
+            font-weight: 600;
+            text-align: right;
+        }
+
+        .info-section {
+            margin-bottom: 16px;
+        }
+
+        .info-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .section-label {
+            font-size: 14px;
+            color: #5b21b6;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 360px;
+            background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%);
+            border-radius: 24px;
+            padding: 8px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            box-shadow: 0 4px 16px rgba(139, 92, 246, 0.2);
+        }
+
+        .nav-item {
+            width: 60px;
+            height: 48px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #9ca3af;
+            cursor: pointer;
+            border-radius: 16px;
+            transition: all 0.3s;
+            gap: 4px;
+        }
+
+        .nav-item:hover {
+            color: #8b5cf6;
+        }
+
+        .nav-item.active {
+            background: #8b5cf6;
+            color: white;
+        }
+
+        .nav-item svg {
+            width: 22px;
+            height: 22px;
+        }
+
+        .nav-text {
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .nav-item:not(.active) .nav-text {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <div class="screen">
+            <!-- Header -->
+            <div class="header">
+                <div class="header-top">
+                    <div class="back-btn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="15 18 9 12 15 6"></polyline>
+                        </svg>
+                    </div>
+                    <div class="header-title">THÔNG TIN CÔNG VIỆC</div>
+                    <div class="menu-btn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Card -->
+            <div class="profile-card">
+                <span class="corner-dot top-left"></span>
+                <span class="corner-dot top-right"></span>
+                <span class="corner-dot bottom-left"></span>
+                <span class="corner-dot bottom-right"></span>
+                
+                <div class="profile-avatar">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </div>
+                <div class="profile-info">
+                    <div class="profile-name">Nguyễn Văn A</div>
+                    <div class="profile-id">ID: 123</div>
+                    <div class="profile-email">an@gmail.com</div>
+                </div>
+            </div>
+
+            <!-- Info Container -->
+            <div class="info-container">
+                <div class="info-row">
+                    <div class="info-label">Họ và tên</div>
+                    <div class="info-value">Nguyễn Văn A</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Mã nhân viên</div>
+                    <div class="info-value">123</div>
+                </div>
+                
+                <div class="info-section">
+                    <div class="section-label">Thông tin pháp lý</div>
+                </div>
+                
+                <div class="info-row">
+                    <div class="info-label">Phòng ban</div>
+                    <div class="info-value">1</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Ngày vào làm</div>
+                    <div class="info-value">12/01/2024</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Loại hợp đồng</div>
+                    <div class="info-value">1</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Trạng thái</div>
+                    <div class="info-value">Đang làm việc</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Quản lý trực tiếp</div>
+                    <div class="info-value">Nguyễn Bình An</div>
+                </div>
+                
+                <div class="info-section">
+                    <div class="section-label">Nhóm chức danh</div>
+                </div>
+                
+                <div class="info-row">
+                    <div class="info-label">Chức danh</div>
+                    <div class="info-value">Nhân viên</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Cấp bậc</div>
+                    <div class="info-value">1A</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Địa điểm làm việc</div>
+                    <div class="info-value">Cầu Giấy</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+            <div class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                </svg>
+            </div>
+            <div class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+            </div>
+            <div class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M12 1v6m0 6v6m7.07-12.07l-4.24 4.24m-5.66 5.66l-4.24 4.24m18.38 0l-4.24-4.24m-5.66-5.66L1.93 1.93"></path>
+                </svg>
+            </div>
+            <div class="nav-item active">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                <span class="nav-text">Tài khoản</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Navigation
+        const navItems = document.querySelectorAll('.nav-item');
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                navItems.forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+            });
+        });
+
+        // Back button
+        document.querySelector('.back-btn').addEventListener('click', () => {
+            console.log('Quay lại');
+        });
+
+        // Menu button
+        document.querySelector('.menu-btn').addEventListener('click', () => {
+            console.log('Mở menu');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8eef5 100%);
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .phone-frame {
+            width: 400px;
+            height: 850px;
+            background: white;
+            border-radius: 40px;
+            padding: 10px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+        }
+
+        .screen {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #f8f9fc 0%, #ffffff 100%);
+            border-radius: 32px;
+            overflow-y: auto;
+            padding-bottom: 80px;
+            position: relative;
+        }
+
+        .screen::-webkit-scrollbar {
+            width: 0;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(to right, #7c3aed 0%, #7c3aed 45%, #a78bfa 55%, #a78bfa 100%);
+            padding: 20px 20px 60px 20px;
+            color: white;
+            position: relative;
+            overflow: visible;
+            clip-path: ellipse(100% 100% at 50% 0%);
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            bottom: -40px;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: linear-gradient(to right, #7c3aed 0%, #7c3aed 45%, #a78bfa 55%, #a78bfa 100%);
+            border-radius: 0 0 50% 50% / 0 0 100% 100%;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse 400px 300px at 15% 20%, rgba(139, 92, 246, 0.3), transparent),
+                radial-gradient(ellipse 350px 250px at 85% 30%, rgba(167, 139, 250, 0.2), transparent);
+            pointer-events: none;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            z-index: 1;
+        }
+
+        .greeting {
+            font-size: 11px;
+            opacity: 0.9;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .online-dot {
+            width: 8px;
+            height: 8px;
+            background: #10b981;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 13px;
+            margin-top: 2px;
+        }
+
+        .notification-badge {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            z-index: 1;
+        }
+
+        .notification-badge:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Timeline */
+        .timeline {
+            background: white;
+            border-radius: 16px;
+            padding: 16px;
+            margin: 16px;
+            margin-top: -20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            position: relative;
+            z-index: 2;
+        }
+
+        .timeline-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 12px;
+        }
+
+        .timeline-bar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .time-point {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .battery-icon {
+            width: 20px;
+            height: 12px;
+            border: 1.5px solid #8b5cf6;
+            border-radius: 2px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            padding: 2px;
+        }
+
+        .battery-icon::after {
+            content: '';
+            position: absolute;
+            right: -3px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 2px;
+            height: 6px;
+            background: #8b5cf6;
+            border-radius: 0 2px 2px 0;
+        }
+
+        .battery-fill {
+            width: 100%;
+            height: 100%;
+            background: #8b5cf6;
+            border-radius: 1px;
+        }
+
+        .timeline-line {
+            flex: 1;
+            height: 2px;
+            background: #e5e7eb;
+            border-radius: 1px;
+            position: relative;
+        }
+
+        .timeline-line::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 50%;
+            height: 100%;
+            background: #8b5cf6;
+            border-radius: 1px;
+        }
+
+        .timeline-line::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 8px;
+            height: 8px;
+            background: #8b5cf6;
+            border-radius: 50%;
+        }
+
+        .time-end {
+            font-size: 12px;
+            font-weight: 600;
+            color: #8b5cf6;
+        }
+
+        /* Dashboard Carousel */
+        .dashboard-carousel {
+            position: relative;
+            padding: 0 16px;
+            margin: 16px 0;
+            overflow: hidden;
+        }
+
+        .carousel-wrapper {
+            overflow-x: auto;
+            overflow-y: hidden;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            display: flex;
+            gap: 16px;
+            padding-bottom: 8px;
+        }
+
+        .carousel-wrapper::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .carousel-wrapper::-webkit-scrollbar-track {
+            background: #f3f4f6;
+            border-radius: 2px;
+        }
+
+        .carousel-wrapper::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 2px;
+        }
+
+        .carousel-wrapper::-webkit-scrollbar-thumb:hover {
+            background: #9ca3af;
+        }
+
+        /* Dashboard Card */
+        .dashboard-card {
+            min-width: calc(100% - 32px);
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-radius: 20px;
+            padding: 24px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            scroll-snap-align: center;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(16, 185, 129, 0.3);
+        }
+
+        .dashboard-card.card-clock {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+        }
+
+        .dashboard-card.card-clock:hover {
+            box-shadow: 0 8px 16px rgba(139, 92, 246, 0.3);
+        }
+
+        .dashboard-card.card-attendance {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        }
+
+        .dashboard-card.card-attendance:hover {
+            box-shadow: 0 8px 16px rgba(245, 158, 11, 0.3);
+        }
+
+        .dashboard-left {
+            z-index: 1;
+        }
+
+        .dashboard-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .dashboard-icons {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .mini-chart {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .dashboard-right {
+            position: relative;
+            z-index: 1;
+        }
+
+        .chart-icon {
+            width: 80px;
+            height: 80px;
+            opacity: 0.3;
+        }
+
+        .carousel-indicators {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 12px;
+        }
+
+        .indicator-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #d1d5db;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .indicator-dot.active {
+            width: 20px;
+            border-radius: 3px;
+            background: #8b5cf6;
+        }
+
+        /* Menu Grid */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            padding: 0 16px;
+            margin: 20px 0;
+        }
+
+        .menu-item {
+            background: transparent;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .menu-item:hover {
+            transform: translateY(-4px);
+        }
+
+        .menu-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 8px;
+            color: white;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.2);
+        }
+
+        .menu-item:hover .menu-icon {
+            transform: scale(1.05);
+            box-shadow: 0 6px 16px rgba(139, 92, 246, 0.3);
+        }
+
+        .menu-label {
+            font-size: 12px;
+            font-weight: 500;
+            color: #1f2937;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 360px;
+            background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%);
+            border-radius: 24px;
+            padding: 8px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            box-shadow: 0 4px 16px rgba(139, 92, 246, 0.2);
+        }
+
+        .nav-item {
+            width: 60px;
+            height: 48px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #9ca3af;
+            cursor: pointer;
+            border-radius: 16px;
+            transition: all 0.3s;
+            gap: 4px;
+        }
+
+        .nav-item:hover {
+            color: #8b5cf6;
+        }
+
+        .nav-item.active {
+            background: #8b5cf6;
+            color: white;
+        }
+
+        .nav-item svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .nav-text {
+            font-size: 10px;
+            font-weight: 500;
+        }
+
+        .nav-item:not(.active) .nav-text {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <div class="screen">
+            <!-- Header -->
+            <div class="header">
+                <div class="header-top">
+                    <div class="header-user">
+                        <div class="avatar">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </div>
+                        <div class="user-info">
+                            <div class="greeting">
+                                Chào buổi sáng 01/10/2025
+                                <span class="online-dot"></span>
+                            </div>
+                            <div class="user-name">Nguyễn Văn A: 023456</div>
+                        </div>
+                    </div>
+                    <div class="notification-badge">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Timeline -->
+            <div class="timeline">
+                <div class="timeline-title">Hành chính</div>
+                <div class="timeline-bar">
+                    <div class="time-point">
+                        8:00
+                        <div class="battery-icon">
+                            <div class="battery-fill"></div>
+                        </div>
+                    </div>
+                    <div class="timeline-line"></div>
+                    <div class="time-point">
+                        <div class="battery-icon">
+                            <div class="battery-fill"></div>
+                        </div>
+                        17:00
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard Carousel -->
+            <div class="dashboard-carousel">
+                <div class="carousel-wrapper">
+                    <!-- Card 1: Dashboard -->
+                    <div class="dashboard-card">
+                        <div class="dashboard-left">
+                            <div class="dashboard-title">DASHBOARD</div>
+                            <div class="dashboard-icons">
+                                <div class="mini-chart">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                        <circle cx="12" cy="12" r="10" opacity="0.3"/>
+                                        <path d="M12 2 A 10 10 0 0 1 22 12 L 12 12 Z"/>
+                                    </svg>
+                                </div>
+                                <div class="mini-chart">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                        <circle cx="6" cy="18" r="2"/>
+                                        <circle cx="12" cy="12" r="2"/>
+                                        <circle cx="18" cy="8" r="2"/>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="dashboard-right">
+                            <svg class="chart-icon" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3">
+                                <rect x="10" y="60" width="15" height="30"/>
+                                <rect x="35" y="40" width="15" height="50"/>
+                                <rect x="60" y="50" width="15" height="40"/>
+                                <rect x="85" y="30" width="15" height="60"/>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Card 2: Giờ vào làm -->
+                    <div class="dashboard-card card-clock">
+                        <div class="dashboard-left">
+                            <div class="dashboard-title">GIỜ VÀO LÀM</div>
+                            <div style="font-size: 32px; font-weight: 700; margin-top: 8px;">8H00</div>
+                            <div style="font-size: 14px; opacity: 0.9; margin-top: 4px;">Đã chấm công: 8H00</div>
+                        </div>
+                        <div class="dashboard-right">
+                            <svg class="chart-icon" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3">
+                                <circle cx="50" cy="50" r="40"/>
+                                <polyline points="50 25 50 50 70 60"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="dashboard-card card-clock">
+                        <div class="dashboard-left">
+                            <div class="dashboard-title">GIỜ VÀO LÀM</div>
+                            <div style="font-size: 32px; font-weight: 700; margin-top: 8px;">8H00</div>
+                            <div style="font-size: 14px; opacity: 0.9; margin-top: 4px;">Đã chấm công: 8H15</div>
+                        </div>
+                        <div class="dashboard-right">
+                            <svg class="chart-icon" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3">
+                                <circle cx="50" cy="50" r="40"/>
+                                <polyline points="50 25 50 50 70 60"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="dashboard-card card-clock">
+                        <div class="dashboard-left">
+                            <div class="dashboard-title">GIỜ VÀO LÀM</div>
+                            <div style="font-size: 32px; font-weight: 700; margin-top: 8px;">8H00</div>
+                            <div style="font-size: 14px; opacity: 0.9; margin-top: 4px;">Nghĩ có phép</div>
+                        </div>
+                        <div class="dashboard-right">
+                            <svg class="chart-icon" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3">
+                                <circle cx="50" cy="50" r="40"/>
+                                <polyline points="50 25 50 50 70 60"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="dashboard-card card-clock">
+                        <div class="dashboard-left">
+                            <div class="dashboard-title">GIỜ VÀO LÀM</div>
+                            <div style="font-size: 32px; font-weight: 700; margin-top: 8px;">8H00</div>
+                            <div style="font-size: 14px; opacity: 0.9; margin-top: 4px;">Vắng mặt</div>
+                        </div>
+                        <div class="dashboard-right">
+                            <svg class="chart-icon" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3">
+                                <circle cx="50" cy="50" r="40"/>
+                                <polyline points="50 25 50 50 70 60"/>
+                            </svg>
+                        </div>
+                    </div>
+
+                  
+                </div>
+                
+                <!-- Carousel Indicators -->
+                <div class="carousel-indicators">
+                    <div class="indicator-dot active" data-index="0"></div>
+                    <div class="indicator-dot" data-index="1"></div>
+                    <div class="indicator-dot" data-index="2"></div>
+                </div>
+            </div>
+
+            <!-- Menu Grid -->
+            <div class="menu-grid">
+                <div class="menu-item">
+                    <div class="menu-icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                            <polyline points="10 9 9 9 8 9"></polyline>
+                        </svg>
+                    </div>
+                    <div class="menu-label">Đơn từ</div>
+                </div>
+
+                <div class="menu-item">
+                    <div class="menu-icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                    </div>
+                    <div class="menu-label">Lịch làm việc</div>
+                </div>
+
+                <div class="menu-item">
+                    <div class="menu-icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="1" x2="12" y2="23"></line>
+                            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                        </svg>
+                    </div>
+                    <div class="menu-label">Bảng lương</div>
+                </div>
+
+                <div class="menu-item">
+                    <div class="menu-icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </div>
+                    <div class="menu-label">Cá nhân</div>
+                </div>
+
+                <div class="menu-item">
+                    <div class="menu-icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                    </div>
+                    <div class="menu-label">Quản lý</div>
+                </div>
+
+                <div class="menu-item">
+                    <div class="menu-icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <circle cx="12" cy="12" r="6"></circle>
+                            <circle cx="12" cy="12" r="2"></circle>
+                        </svg>
+                    </div>
+                    <div class="menu-label">Mục tiêu KPI</div>
+                </div>
+
+                <div class="menu-item">
+                    <div class="menu-icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="9" y1="9" x2="15" y2="15"></line>
+                            <line x1="15" y1="9" x2="9" y2="15"></line>
+                        </svg>
+                    </div>
+                    <div class="menu-label">Đánh giá KPI</div>
+                </div>
+
+                <div class="menu-item">
+                    <div class="menu-icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="23 4 23 10 17 10"></polyline>
+                            <polyline points="1 20 1 14 7 14"></polyline>
+                            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                        </svg>
+                    </div>
+                    <div class="menu-label">Đổi ca</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+            <div class="nav-item active">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                </svg>
+                <span class="nav-text">Trang chủ</span>
+            </div>
+            <div class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+            </div>
+            <div class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2a5 5 0 1 0 5 5 5 5 0 0 0-5-5z"></path>
+                    <path d="M12 14a7 7 0 0 0-7 7h14a7 7 0 0 0-7-7z"></path>
+                </svg>
+            </div>
+            <div class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Navigation
+        const navItems = document.querySelectorAll('.nav-item');
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                navItems.forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+            });
+        });
+
+        // Menu Items
+        const menuItems = document.querySelectorAll('.menu-item');
+        menuItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const label = item.querySelector('.menu-label').textContent;
+                console.log('Clicked:', label);
+            });
+        });
+
+        // Carousel
+        const carouselWrapper = document.querySelector('.carousel-wrapper');
+        const cards = document.querySelectorAll('.dashboard-card');
+        const indicators = document.querySelectorAll('.indicator-dot');
+
+        // Update active indicator based on scroll position
+        carouselWrapper.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - carouselWrapper.offsetLeft;
+            const walk = (x - startX) * 2;
+            carouselWrapper.scrollLeft = scrollLeft - walk;
+        });
+    </script>
+</body>
+</html>
