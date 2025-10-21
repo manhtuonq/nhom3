@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check In/Out</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        
+        * {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 28rem;
+            margin: 0 auto;
+            background: #f5f5f5;
+            min-height: 100vh;
+            position: relative;
+            padding-bottom: 6rem;
+        }
+        
+        /* Header Styles */
+        .header {
+            background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+            padding: 1.5rem 1.25rem 2rem;
+            border-radius: 0 0 2rem 2rem;
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .back-btn {
+            width: 2.5rem;
+            height: 2.5rem;
+            background: rgba(0, 0, 0, 0.2);
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+        
+        .back-btn:hover {
+            background: rgba(0, 0, 0, 0.3);
+        }
+        
+        .back-btn svg {
+            width: 1.5rem;
+            height: 1.5rem;
+            color: white;
+        }
+        
+        .page-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        /* Date Picker Section */
+        .date-picker-section {
+            padding: 1.5rem 1.25rem;
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .date-input-wrapper {
+            flex: 1;
+            position: relative;
+        }
+        
+        .date-input {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            padding-right: 3rem;
+            border-radius: 0.75rem;
+            border: 2px solid #e5e7eb;
+            background: white;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #1f2937;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        
+        .date-input:focus {
+            border-color: #8b5cf6;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+        }
+        
+        .calendar-icon {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 1.25rem;
+            height: 1.25rem;
+            color: #6b7280;
+            pointer-events: none;
+        }
+        
+        /* Content Section */
+        .content-section {
+            padding: 0 1.25rem;
+        }
+        
+        /* Check Record Card */
+        .check-record {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        }
+        
+        .record-row {
+            display: flex;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+            line-height: 1.5;
+        }
+        
+        .record-row:last-child {
+            margin-bottom: 0;
+        }
+        
+        .record-label {
+            color: #1f2937;
+            font-weight: 600;
+            min-width: 5.5rem;
+        }
+        
+        .record-value {
+            color: #1f2937;
+            font-weight: 400;
+            flex: 1;
+        }
+        
+        .record-value.main-shift {
+            color: #10b981;
+            font-weight: 600;
+        }
+        
+        .record-value.approved {
+            color: #10b981;
+            font-weight: 600;
+        }
+        
+        /* Action Buttons */
+        .action-buttons {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            max-width: 28rem;
+            width: 100%;
+            padding: 0 1.25rem;
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .btn-check-in {
+            flex: 1;
+            background: #14b8a6;
+            color: white;
+            border: none;
+            border-radius: 0.75rem;
+            padding: 1rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(20, 184, 166, 0.3);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+        
+        .btn-check-in:hover {
+            background: #0d9488;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(20, 184, 166, 0.4);
+        }
+        
+        .btn-check-out {
+            flex: 1;
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 0.75rem;
+            padding: 1rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+        
+        .btn-check-out:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(239, 68, 68, 0.4);
+        }
+        
+        /* Bottom Indicator */
+        .bottom-indicator {
+            position: fixed;
+            bottom: 0.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 8rem;
+            height: 0.25rem;
+            background: #9ca3af;
+            border-radius: 9999px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <button class="back-btn" onclick="goBack()">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                </svg>
+            </button>
+            <h1 class="page-title">CHECK IN/OUT</h1>
+        </div>
+        
+        <!-- Date Picker Section -->
+        <div class="date-picker-section">
+            <div class="date-input-wrapper">
+                <input type="text" class="date-input" value="02/10/2025" readonly>
+                <svg class="calendar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                </svg>
+            </div>
+            <div class="date-input-wrapper">
+                <input type="text" class="date-input" value="09/10/2025" readonly>
+                <svg class="calendar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                </svg>
+            </div>
+        </div>
+        
+        <!-- Content Section -->
+        <div class="content-section">
+            <!-- Record 1 -->
+            <div class="check-record">
+                <div class="record-row">
+                    <span class="record-label">Bộ phận:</span>
+                    <span class="record-value">6150490 - KT33B6 - 3386</span>
+                </div>
+                <div class="record-row">
+                    <span class="record-label">Loại công:</span>
+                    <span class="record-value main-shift">Chính công ra</span>
+                </div>
+                <div class="record-row">
+                    <span class="record-label">Thời gian:</span>
+                    <span class="record-value">10/10/2025  16:05</span>
+                </div>
+                <div class="record-row">
+                    <span class="record-label">Tình trạng:</span>
+                    <span class="record-value approved">Đã duyệt</span>
+                </div>
+            </div>
+            
+            <!-- Record 2 -->
+            <div class="check-record">
+                <div class="record-row">
+                    <span class="record-label">Bộ phận:</span>
+                    <span class="record-value">6150490 - KT33B6 - 3386</span>
+                </div>
+                <div class="record-row">
+                    <span class="record-label">Loại công:</span>
+                    <span class="record-value main-shift">Chính công vào</span>
+                </div>
+                <div class="record-row">
+                    <span class="record-label">Thời gian:</span>
+                    <span class="record-value">10/10/2025  07:56</span>
+                </div>
+                <div class="record-row">
+                    <span class="record-label">Tình trạng:</span>
+                    <span class="record-value approved">Đã duyệt</span>
+                </div>
+            </div>
+            
+            <!-- Record 3 -->
+            <div class="check-record">
+                <div class="record-row">
+                    <span class="record-label">Bộ phận:</span>
+                    <span class="record-value">6150490 - KT33B6 - 3386</span>
+                </div>
+                <div class="record-row">
+                    <span class="record-label">Loại công:</span>
+                    <span class="record-value main-shift">Chính công ra</span>
+                </div>
+                <div class="record-row">
+                    <span class="record-label">Thời gian:</span>
+                    <span class="record-value">09/10/2025  16:10</span>
+                </div>
+                <div class="record-row">
+                    <span class="record-label">Tình trạng:</span>
+                    <span class="record-value approved">Đã duyệt</span>
+                </div>
+            </div>
+            
+            <!-- Record 4 -->
+            <div class="check-record">
+                <div class="record-row">
+                    <span class="record-label">Bộ phận:</span>
+                    <span class="record-value">6150490 - KT33B6 - 3386</span>
+                </div>
+                <div class="record-row">
+                    <span class="record-label">Loại công:</span>
+                    <span class="record-value main-shift">Chính công vào</span>
+                </div>
+                <div class="record-row">
+                    <span class="record-label">Thời gian:</span>
+                    <span class="record-value">09/10/2025  07:56</span>
+                </div>
+                <div class="record-row">
+                    <span class="record-label">Tình trạng:</span>
+                    <span class="record-value approved">Đã duyệt</span>
+                </div>
+            </div>
+            
+            <!-- Record 5 -->
+            <div class="check-record">
+                <div class="record-row">
+                    <span class="record-label">Bộ phận:</span>
+                    <span class="record-value">6150490 - KT33B6 - 3386</span>
+                </div>
+                <div class="record-row">
+                    <span class="record-label">Loại công:</span>
+                    <span class="record-value main-shift">Chính công ra</span>
+                </div>
+                <div class="record-row">
+                    <span class="record-label">Thời gian:</span>
+                    <span class="record-value">08/10/2025  16:10</span>
+                </div>
+                <div class="record-row">
+                    <span class="record-label">Tình trạng:</span>
+                    <span class="record-value approved">Đã duyệt</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn-check-in" onclick="checkIn()">Vào</button>
+            <button class="btn-check-out" onclick="checkOut()">Ra</button>
+        </div>
+        
+        <!-- Bottom Indicator -->
+        <div class="bottom-indicator"></div>
+    </div>
+    
+    <script>
+        function goBack() {
+            alert('Quay lại trang trước');
+        }
+        
+        function checkIn() {
+            alert('Check In - Vào làm');
+        }
+        
+        function checkOut() {
+            alert('Check Out - Ra về');
+        }
+        
+        // Date input functionality
+        document.querySelectorAll('.date-input').forEach(input => {
+            input.addEventListener('click', function() {
+                alert('Mở date picker cho: ' + this.value);
+            });
+        });
+    </script>
+</body>
+</html>

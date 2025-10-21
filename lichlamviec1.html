@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lịch làm việc</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        
+        * {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 28rem;
+            margin: 0 auto;
+            background: #f5f5f5;
+            min-height: 100vh;
+            position: relative;
+            padding-bottom: 4rem;
+        }
+        
+        /* Header Styles */
+        .header {
+            background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+            padding: 1rem 1.25rem 3rem;
+            border-radius: 0 0 3rem 3rem;
+            position: relative;
+        }
+        
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .back-btn {
+            width: 2.5rem;
+            height: 2.5rem;
+            background: rgba(0, 0, 0, 0.2);
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .back-btn:hover {
+            background: rgba(0, 0, 0, 0.3);
+        }
+        
+        .back-btn svg {
+            width: 1.5rem;
+            height: 1.5rem;
+            color: white;
+        }
+        
+        .page-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .notif-btn {
+            width: 2.5rem;
+            height: 2.5rem;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .notif-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .notif-btn svg {
+            width: 1.5rem;
+            height: 1.5rem;
+            color: white;
+        }
+        
+        /* Calendar Container */
+        .calendar-container {
+            padding: 0 1.25rem;
+            margin-top: -2rem;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .calendar-card {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1rem;
+        }
+        
+        /* Calendar Header */
+        .calendar-header {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .day-label {
+            text-align: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #9ca3af;
+            text-transform: uppercase;
+            padding: 0.5rem 0;
+        }
+        
+        /* Calendar Grid */
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.5rem;
+        }
+        
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .calendar-day.teal {
+            background: #14b8a6;
+            color: white;
+        }
+        
+        .calendar-day.red {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .calendar-day.gray {
+            background: #d1d5db;
+            color: white;
+        }
+        
+        .calendar-day:hover {
+            transform: scale(1.05);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Legend */
+        .legend {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            margin-bottom: 1rem;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .legend-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .legend-color {
+            width: 2.5rem;
+            height: 0.375rem;
+            border-radius: 9999px;
+        }
+        
+        .legend-color.teal {
+            background: #14b8a6;
+        }
+        
+        .legend-color.red {
+            background: #ef4444;
+        }
+        
+        .legend-color.gray {
+            background: #d1d5db;
+        }
+        
+        .legend-text {
+            font-size: 0.875rem;
+            color: #1f2937;
+            font-weight: 500;
+        }
+        
+        /* Schedule Cards */
+        .schedule-card {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 1.25rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            margin-bottom: 1rem;
+        }
+        
+        .schedule-row {
+            display: flex;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .schedule-row:last-child {
+            margin-bottom: 0;
+        }
+        
+        .schedule-label {
+            color: #6b7280;
+            font-weight: 500;
+            min-width: 5.5rem;
+        }
+        
+        .schedule-value {
+            color: #1f2937;
+            font-weight: 600;
+            flex: 1;
+        }
+        
+        .schedule-value.approved {
+            color: #10b981;
+        }
+        
+        .schedule-value.pending {
+            color: #f59e0b;
+        }
+        
+        /* Bottom Indicator */
+        .bottom-indicator {
+            width: 8rem;
+            height: 0.25rem;
+            background: #9ca3af;
+            border-radius: 9999px;
+            margin: 2rem auto 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-top">
+                <button class="back-btn" onclick="goBack()">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                </button>
+                <h1 class="page-title">LỊCH LÀM VIỆC</h1>
+                <button class="notif-btn" onclick="showNotifications()">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Calendar -->
+        <div class="calendar-container">
+            <div class="calendar-card">
+                <!-- Day Labels -->
+                <div class="calendar-header">
+                    <div class="day-label">SUN</div>
+                    <div class="day-label">MON</div>
+                    <div class="day-label">WED</div>
+                    <div class="day-label">THU</div>
+                    <div class="day-label">FRI</div>
+                    <div class="day-label">SAT</div>
+                    <div class="day-label">SUN</div>
+                </div>
+                
+                <!-- Calendar Grid -->
+                <div class="calendar-grid">
+                    <!-- Week 1 -->
+                    <div class="calendar-day teal">1</div>
+                    <div class="calendar-day teal">2</div>
+                    <div class="calendar-day teal">3</div>
+                    <div class="calendar-day gray">4</div>
+                    <div class="calendar-day gray">5</div>
+                    
+                    <!-- Week 2 -->
+                    <div class="calendar-day teal">6</div>
+                    <div class="calendar-day teal">7</div>
+                    <div class="calendar-day teal">8</div>
+                    <div class="calendar-day red">9</div>
+                    <div class="calendar-day teal">10</div>
+                    <div class="calendar-day gray">11</div>
+                    <div class="calendar-day gray">12</div>
+                    
+                    <!-- Week 3 -->
+                    <div class="calendar-day teal">13</div>
+                    <div class="calendar-day teal">14</div>
+                    <div class="calendar-day teal">15</div>
+                    <div class="calendar-day teal">16</div>
+                    <div class="calendar-day teal">17</div>
+                    <div class="calendar-day teal">18</div>
+                    <div class="calendar-day gray">19</div>
+                    <div class="calendar-day gray">20</div>
+                    
+                    <!-- Week 4 -->
+                    <div class="calendar-day teal">21</div>
+                    <div class="calendar-day red">22</div>
+                    <div class="calendar-day teal">23</div>
+                    <div class="calendar-day teal">24</div>
+                    <div class="calendar-day teal">25</div>
+                    <div class="calendar-day gray">26</div>
+                    <div class="calendar-day gray">27</div>
+                    
+                    <!-- Week 5 -->
+                    <div class="calendar-day teal">28</div>
+                    <div class="calendar-day teal">29</div>
+                    <div class="calendar-day teal">30</div>
+                    <div class="calendar-day teal">31</div>
+                </div>
+            </div>
+            
+            <!-- Legend -->
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color teal"></div>
+                    <span class="legend-text">Đúng giờ đầy đủ</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color red"></div>
+                    <span class="legend-text">Đi trễ/ Về sớm/ Vắng mặt</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color gray"></div>
+                    <span class="legend-text">Không có lịch làm việc</span>
+                </div>
+            </div>
+            
+            <!-- Schedule Card 1 -->
+            <div class="schedule-card">
+                <div class="schedule-row">
+                    <span class="schedule-label">Bộ phận:</span>
+                    <span class="schedule-value">6150480 - KT33B6 - 3386</span>
+                </div>
+                <div class="schedule-row">
+                    <span class="schedule-label">Loại công:</span>
+                    <span class="schedule-value">Chính công</span>
+                </div>
+                <div class="schedule-row">
+                    <span class="schedule-label">Thời gian:</span>
+                    <span class="schedule-value">31/10/2025 - 02:58</span>
+                </div>
+                <div class="schedule-row">
+                    <span class="schedule-label">Tình trạng:</span>
+                    <span class="schedule-value approved">Đã duyệt</span>
+                </div>
+            </div>
+            
+            <!-- Schedule Card 2 -->
+            <div class="schedule-card">
+                <div class="schedule-row">
+                    <span class="schedule-label">Bộ phận:</span>
+                    <span class="schedule-value">6150480 - KT33B6 - 3386</span>
+                </div>
+                <div class="schedule-row">
+                    <span class="schedule-label">Loại công:</span>
+                    <span class="schedule-value">Chính công</span>
+                </div>
+                <div class="schedule-row">
+                    <span class="schedule-label">Thời gian:</span>
+                    <span class="schedule-value">31/10/2025 - 16:10</span>
+                </div>
+                <div class="schedule-row">
+                    <span class="schedule-label">Tình trạng:</span>
+                    <span class="schedule-value pending">Đã duyệt</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Bottom Indicator -->
+        <div class="bottom-indicator"></div>
+    </div>
+    
+    <script>
+        function goBack() {
+            alert('Quay lại trang trước');
+        }
+        
+        function showNotifications() {
+            alert('Hiển thị thông báo');
+        }
+        
+        // Add click handlers for calendar days
+        document.querySelectorAll('.calendar-day').forEach(day => {
+            day.addEventListener('click', function() {
+                alert('Xem chi tiết ngày ' + this.textContent);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nghỉ Phép</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        
+        * {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 28rem;
+            margin: 0 auto;
+            background: #f5f5f5;
+            min-height: 100vh;
+            position: relative;
+            padding-bottom: 6rem;
+        }
+        
+        /* Header Styles */
+        .header {
+            background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+            padding: 1.5rem 1.25rem 3rem;
+            border-radius: 0 0 2rem 2rem;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .back-btn {
+            width: 3rem;
+            height: 3rem;
+            background: rgba(0, 0, 0, 0.2);
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+        
+        .back-btn:hover {
+            background: rgba(0, 0, 0, 0.3);
+        }
+        
+        .back-btn svg {
+            width: 1.5rem;
+            height: 1.5rem;
+            color: white;
+        }
+        
+        .page-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .notification-btn {
+            width: 3rem;
+            height: 3rem;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .notification-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .notification-btn svg {
+            width: 1.5rem;
+            height: 1.5rem;
+            color: white;
+        }
+        
+        /* Content Section */
+        .content-section {
+            padding: 0 1.25rem;
+            margin-top: -1.5rem;
+        }
+        
+        /* Section Title Card */
+        .section-title-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+        
+        .section-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #1f2937;
+            text-transform: uppercase;
+        }
+        
+        /* Info Grid */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .info-box {
+            background: linear-gradient(135deg, #ddd6fe 0%, #e9d5ff 100%);
+            border-radius: 1rem;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+        
+        .info-label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #6b21a8;
+        }
+        
+        .info-value {
+            font-size: 0.875rem;
+            font-weight: 400;
+            color: #1f2937;
+        }
+        
+        /* Time Period Section */
+        .time-period-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+        
+        .time-period-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #1f2937;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+        
+        .date-inputs {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+        
+        .date-field {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .date-label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #1f2937;
+        }
+        
+        .date-input-wrapper {
+            position: relative;
+        }
+        
+        .date-input {
+            width: 100%;
+            padding: 0.75rem 2.5rem 0.75rem 0.875rem;
+            border-radius: 0.5rem;
+            border: 2px solid #e5e7eb;
+            background: white;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #1f2937;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        
+        .date-input:focus {
+            border-color: #8b5cf6;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+        }
+        
+        .calendar-icon {
+            position: absolute;
+            right: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 1.25rem;
+            height: 1.25rem;
+            color: #6b7280;
+            pointer-events: none;
+        }
+        
+        /* Reason Input */
+        .reason-field {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .reason-input {
+            width: 100%;
+            padding: 0.875rem;
+            border-radius: 0.5rem;
+            border: 2px solid #e5e7eb;
+            background: white;
+            font-size: 0.875rem;
+            color: #9ca3af;
+            outline: none;
+            transition: all 0.3s ease;
+            min-height: 4rem;
+            resize: vertical;
+        }
+        
+        .reason-input:focus {
+            border-color: #8b5cf6;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+            color: #1f2937;
+        }
+        
+        /* Submit Button */
+        .submit-btn-wrapper {
+            padding: 0 1.25rem;
+            margin-top: 2rem;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #a78bfa 0%, #c4b5fd 100%);
+            color: #5b21b6;
+            border: none;
+            border-radius: 1rem;
+            padding: 1rem;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(139, 92, 246, 0.4);
+        }
+        
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            max-width: 26rem;
+            width: calc(100% - 2.5rem);
+            background: white;
+            border-radius: 1.5rem;
+            padding: 0.75rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border: none;
+            background: none;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-item:hover {
+            transform: scale(1.1);
+        }
+        
+        .nav-item.active {
+            background: #8b5cf6;
+            border-radius: 1rem;
+            padding: 0.75rem 1.5rem;
+        }
+        
+        .nav-item.active .nav-icon {
+            color: white;
+        }
+        
+        .nav-item.active .nav-label {
+            color: white;
+        }
+        
+        .nav-icon {
+            width: 1.5rem;
+            height: 1.5rem;
+            color: #9ca3af;
+        }
+        
+        .nav-label {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: #9ca3af;
+        }
+        
+        /* Bottom Indicator */
+        .bottom-indicator {
+            position: fixed;
+            bottom: 0.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 8rem;
+            height: 0.25rem;
+            background: #1f2937;
+            border-radius: 9999px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-left">
+                <button class="back-btn" onclick="goBack()">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                </button>
+                <h1 class="page-title">NGHỈ PHÉP</h1>
+            </div>
+            <button class="notification-btn" onclick="showNotifications()">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+                </svg>
+            </button>
+        </div>
+        
+        <!-- Content Section -->
+        <div class="content-section">
+            <!-- Section Title -->
+            <div class="section-title-card">
+                <h2 class="section-title">PHÉP CỦA TÔI</h2>
+            </div>
+            
+            <!-- Info Grid -->
+            <div class="info-grid">
+                <div class="info-box">
+                    <span class="info-label">Phép năm:</span>
+                    <span class="info-value">12 ngày</span>
+                </div>
+                <div class="info-box">
+                    <span class="info-label">Phép năm còn lại:</span>
+                    <span class="info-value">8 ngày</span>
+                </div>
+                <div class="info-box">
+                    <span class="info-label">Ngày ứng còn lại:</span>
+                    <span class="info-value">2 ngày</span>
+                </div>
+                <div class="info-box">
+                    <span class="info-label">Giờ bù còn lại:</span>
+                    <span class="info-value">16 giờ</span>
+                </div>
+            </div>
+            
+            <!-- Time Period -->
+            <div class="time-period-card">
+                <h3 class="time-period-title">THỜI GIAN NGHỈ PHÉP</h3>
+                
+                <div class="date-inputs">
+                    <div class="date-field">
+                        <label class="date-label">Từ ngày</label>
+                        <div class="date-input-wrapper">
+                            <input type="text" class="date-input" value="02/10/2025">
+                            <svg class="calendar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    
+                    <div class="date-field">
+                        <label class="date-label">Đến ngày</label>
+                        <div class="date-input-wrapper">
+                            <input type="text" class="date-input" value="09/10/2025">
+                            <svg class="calendar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="reason-field">
+                    <textarea class="reason-input" placeholder="Nhập lý do"></textarea>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Submit Button -->
+        <div class="submit-btn-wrapper">
+            <button class="submit-btn" onclick="submitRequest()">GỬI DUYỆT</button>
+        </div>
+        
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+            <button class="nav-item" onclick="navTo('home')">
+                <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                </svg>
+            </button>
+            
+            <button class="nav-item" onclick="navTo('stats')">
+                <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                </svg>
+            </button>
+            
+            <button class="nav-item active" onclick="navTo('attendance')">
+                <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/>
+                </svg>
+                <span class="nav-label">Chấm công</span>
+            </button>
+            
+            <button class="nav-item" onclick="navTo('profile')">
+                <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                </svg>
+            </button>
+        </div>
+        
+        <!-- Bottom Indicator -->
+        <div class="bottom-indicator"></div>
+    </div>
+    
+    <script>
+        function goBack() {
+            alert('Quay lại trang trước');
+        }
+        
+        function showNotifications() {
+            alert('Hiển thị thông báo');
+        }
+        
+        function submitRequest() {
+            alert('Gửi đơn xin nghỉ phép');
+        }
+        
+        function navTo(section) {
+            alert('Điều hướng đến: ' + section);
+        }
+        
+        // Date input functionality
+        document.querySelectorAll('.date-input').forEach(input => {
+            input.addEventListener('click', function() {
+                alert('Mở date picker cho: ' + this.value);
+            });
+        });
+    </script>
+</body>
+</html>
