@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quên mật khẩu</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8eef5 100%);
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .phone-frame {
+            width: 400px;
+            height: 850px;
+            background: white;
+            border-radius: 40px;
+            padding: 10px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+        }
+
+        .screen {
+            width: 100%;
+            height: 100%;
+            background: #ffffff;
+            border-radius: 32px;
+            overflow-y: auto;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .screen::-webkit-scrollbar {
+            width: 0;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            padding: 20px;
+            color: white;
+            position: relative;
+        }
+
+        .back-btn {
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.25);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.35);
+        }
+
+        .back-btn svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* Content */
+        .content {
+            flex: 1;
+            padding: 60px 30px 30px 30px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .icon-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+
+        .lock-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lock-icon svg {
+            width: 40px;
+            height: 40px;
+            color: #8b5cf6;
+        }
+
+        .title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #004977;
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
+        .description {
+            font-size: 15px;
+            color: #6b7280;
+            text-align: center;
+            margin-bottom: 40px;
+            line-height: 1.5;
+        }
+
+        .input-group {
+            margin-bottom: 30px;
+        }
+
+        .input-label {
+            font-size: 15px;
+            font-weight: 600;
+            color: #004977;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .input-wrapper {
+            background: white;
+            border-radius: 12px;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border: 2px solid #f3f4f6;
+            transition: all 0.3s;
+        }
+
+        .input-wrapper:focus-within {
+            border-color: #8b5cf6;
+            box-shadow: 0 4px 16px rgba(139, 92, 246, 0.15);
+        }
+
+        .input-icon {
+            width: 24px;
+            height: 24px;
+            color: #8b5cf6;
+            flex-shrink: 0;
+        }
+
+        .input-field {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 15px;
+            color: #1f2937;
+            background: transparent;
+        }
+
+        .input-field::placeholder {
+            color: #9ca3af;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%);
+            color: white;
+            border: none;
+            border-radius: 16px;
+            padding: 18px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 16px rgba(139, 92, 246, 0.3);
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #004977;
+            font-size: 13px;
+            margin-top: auto;
+        }
+
+        .footer-text {
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .footer-link {
+            color: #004977;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .footer-link:hover {
+            text-decoration: underline;
+        }
+
+        .home-indicator {
+            width: 134px;
+            height: 5px;
+            background: #1f2937;
+            border-radius: 100px;
+            margin: 12px auto 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <div class="screen">
+            <!-- Header -->
+            <div class="header">
+                <div class="back-btn" id="backBtn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div class="content">
+                <div class="icon-container">
+                    <div class="lock-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                            <circle cx="12" cy="16" r="1"></circle>
+                        </svg>
+                    </div>
+                </div>
+
+                <h1 class="title">Quên mật khẩu</h1>
+                <p class="description">Điền email của bạn để<br>nhận mã reset mật khẩu</p>
+
+                <div class="input-group">
+                    <label class="input-label">Email</label>
+                    <div class="input-wrapper">
+                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                        <input type="email" class="input-field" placeholder="Nhập email của bạn" id="email">
+                    </div>
+                </div>
+
+                <button class="submit-btn" id="submitBtn">Gửi</button>
+            </div>
+
+            <!-- Footer -->
+            <div class="footer">
+                <div class="footer-text">© HR Cloud Solutions 2025</div>
+                <div class="footer-text">
+                    <a href="#" class="footer-link">[Điều khoản]</a> | 
+                    <a href="#" class="footer-link">[Chính sách bảo mật]</a>
+                </div>
+                <div class="home-indicator"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Back button
+        document.getElementById('backBtn').addEventListener('click', () => {
+            console.log('Quay lại màn hình đăng nhập');
+            // Add navigation logic here
+        });
+
+        // Submit button
+        document.getElementById('submitBtn').addEventListener('click', () => {
+            const email = document.getElementById('email').value;
+            
+            if (!email) {
+                alert('Vui lòng nhập email');
+                return;
+            }
+            
+            // Validate email format
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                alert('Email không hợp lệ');
+                return;
+            }
+            
+            console.log('Gửi mã reset cho email:', email);
+            alert('Mã reset đã được gửi đến email của bạn!');
+            // Add reset password logic here
+        });
+
+        // Enter key to submit
+        document.getElementById('email').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                document.getElementById('submitBtn').click();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -3,383 +3,540 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản lý báo cáo và Phê duyệt</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Đăng Nhập - MatchaTrisha</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-        
         * {
-            font-family: 'Inter', sans-serif;
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
-            background: #f5f5f5;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
         }
-        
-        .header-gradient {
-            background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 50%, #7c3aed 100%);
-            padding: 1.5rem;
-            padding-bottom: 2rem;
-            position: relative;
-        }
-        
-        .header-gradient::after {
-            content: '';
-            position: absolute;
-            bottom: -1px;
-            left: 0;
-            right: 0;
-            height: 60px;
-            background: #f5f5f5;
-            border-radius: 50% 50% 0 0 / 100% 100% 0 0;
-        }
-        
-        .search-box {
-            position: relative;
-            z-index: 10;
-            margin-top: 1rem;
-        }
-        
-        .search-box input {
-            width: 100%;
-            padding: 0.875rem 1rem 0.875rem 3rem;
-            border-radius: 9999px;
-            border: none;
+
+        .container {
             background: white;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            outline: none;
-            font-size: 0.95rem;
-        }
-        
-        .search-box input:focus {
-            box-shadow: 0 6px 16px rgba(139, 92, 246, 0.2);
-        }
-        
-        .search-icon {
-            position: absolute;
-            left: 1rem;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 1.25rem;
-            height: 1.25rem;
-            color: #9ca3af;
-        }
-        
-        .main-card {
-            background: white;
-            border-radius: 1.5rem;
-            padding: 1.5rem;
-            margin: 1.5rem 1rem;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-        }
-        
-        .action-btn {
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 450px;
             width: 100%;
-            background: linear-gradient(135deg, #ddd6fe 0%, #c4b5fd 100%);
-            border: 1px solid #c4b5fd;
-            border-radius: 1rem;
-            padding: 1rem 1.25rem;
+            overflow: hidden;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            padding: 40px 30px;
+            text-align: center;
+            color: white;
+        }
+
+        .logo-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: white;
+            border-radius: 50%;
             display: flex;
             align-items: center;
-            gap: 1rem;
+            justify-content: center;
+            font-size: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .form-container {
+            padding: 40px 30px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .input-wrapper:focus-within {
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+        }
+
+        .input-icon {
+            padding: 0 15px;
+            color: #667eea;
+            font-size: 20px;
+        }
+
+        .form-input {
+            flex: 1;
+            padding: 18px 15px 18px 0;
+            border: none;
+            background: transparent;
+            font-size: 16px;
+            outline: none;
+            color: #333;
+        }
+
+        .form-input::placeholder {
+            color: #999;
+        }
+
+        .toggle-password {
+            padding: 0 15px;
+            cursor: pointer;
+            color: #999;
+            font-size: 20px;
+            transition: color 0.3s ease;
+        }
+
+        .toggle-password:hover {
+            color: #667eea;
+        }
+
+        .forgot-password {
+            text-align: right;
+            margin-top: -15px;
+            margin-bottom: 25px;
+        }
+
+        .forgot-password a {
+            color: #667eea;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .forgot-password a:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
-            margin-bottom: 1rem;
+            margin-bottom: 20px;
         }
-        
-        .action-btn:last-child {
-            margin-bottom: 0;
-        }
-        
-        .action-btn:hover {
+
+        .btn-login:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(139, 92, 246, 0.25);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
         }
-        
-        .action-btn:active {
+
+        .btn-login:active {
             transform: translateY(0);
         }
-        
-        .icon-box {
-            width: 3rem;
-            height: 3rem;
-            background: white;
-            border-radius: 0.75rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+
+        .divider {
+            text-align: center;
+            margin: 25px 0;
+            position: relative;
         }
-        
-        .icon-box svg {
-            width: 1.75rem;
-            height: 1.75rem;
-            color: #7c3aed;
-        }
-        
-        .btn-text {
-            font-size: 1rem;
-            font-weight: 700;
-            color: #5b21b6;
-        }
-        
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
             left: 0;
             right: 0;
-            background: linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%);
-            padding: 1rem 2rem 0.5rem;
-            border-radius: 1.5rem 1.5rem 0 0;
-            box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+            height: 1px;
+            background: #ddd;
         }
-        
-        .nav-container {
-            max-width: 28rem;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .nav-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            padding: 0.5rem;
-        }
-        
-        .nav-btn:hover {
-            transform: scale(1.15);
-        }
-        
-        .nav-btn svg {
-            width: 1.75rem;
-            height: 1.75rem;
-            color: #7c3aed;
-        }
-        
-        .bottom-indicator {
-            width: 8rem;
-            height: 0.25rem;
-            background: #9ca3af;
-            border-radius: 9999px;
-            margin: 0.75rem auto 0;
-        }
-        
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            margin-bottom: 1rem;
-        }
-        
-        .avatar {
-            width: 2.5rem;
-            height: 2.5rem;
+
+        .divider span {
             background: white;
-            border-radius: 9999px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .avatar svg {
-            width: 1.5rem;
-            height: 1.5rem;
-            color: #7c3aed;
-        }
-        
-        .user-text {
-            flex: 1;
-        }
-        
-        .greeting {
-            font-size: 0.875rem;
-            color: white;
-            opacity: 0.95;
-        }
-        
-        .user-name {
-            font-size: 0.875rem;
-            color: white;
-            font-weight: 600;
-        }
-        
-        .notif-btn {
-            width: 2.5rem;
-            height: 2.5rem;
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            border-radius: 9999px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .notif-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: scale(1.1);
-        }
-        
-        .notif-btn svg {
-            width: 1.5rem;
-            height: 1.5rem;
-            color: white;
-        }
-        
-        .page-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: white;
-            margin-top: 0.5rem;
+            padding: 0 15px;
+            color: #999;
+            font-size: 14px;
             position: relative;
-            z-index: 10;
+        }
+
+        .register-link {
+            text-align: center;
+            color: #666;
+            font-size: 15px;
+        }
+
+        .register-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        .register-link a:hover {
+            color: #764ba2;
+        }
+
+        .footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            color: #6c757d;
+            font-size: 14px;
+        }
+
+        .footer a {
+            color: #667eea;
+            text-decoration: none;
+            margin: 0 10px;
+            transition: color 0.3s ease;
+        }
+
+        .footer a:hover {
+            color: #764ba2;
+        }
+
+        /* Modal cho quên mật khẩu */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: white;
+            margin: 10% auto;
+            padding: 0;
+            border-radius: 20px;
+            max-width: 450px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 30px;
+            text-align: center;
+            color: white;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .modal-header h2 {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .modal-header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .modal-body {
+            padding: 30px;
+        }
+
+        .close {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            color: white;
+            font-size: 32px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+
+        .close:hover {
+            opacity: 0.7;
+        }
+
+        .success-message {
+            display: none;
+            background: #d4edda;
+            border: 2px solid #28a745;
+            color: #155724;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            animation: slideIn 0.3s ease;
+        }
+
+        .error-message {
+            display: none;
+            background: #f8d7da;
+            border: 2px solid #dc3545;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                margin: 10px;
+            }
+
+            .header {
+                padding: 30px 20px;
+            }
+
+            .form-container {
+                padding: 30px 20px;
+            }
+
+            .modal-content {
+                margin: 20% auto;
+            }
         }
     </style>
 </head>
 <body>
-    <div style="max-width: 28rem; margin: 0 auto; background: white; min-height: 100vh; position: relative; padding-bottom: 6rem;">
-        <!-- Header -->
-        <div class="header-gradient">
-            <div style="position: relative; z-index: 10;">
-                <!-- User Info Row -->
-                <div class="user-info">
-                    <div class="avatar">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                        </svg>
-                    </div>
-                    <div class="user-text">
-                        <div class="greeting">Chào buổi sáng 01/10/2025</div>
-                        <div class="user-name">Nguyễn Văn A: 023458</div>
-                    </div>
-                    <button class="notif-btn">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
-                        </svg>
-                    </button>
-                </div>
-                
-                <!-- Title -->
-                <h1 class="page-title">Quản lý báo cáo và Phê duyệt</h1>
-            </div>
+    <div class="container">
+        <div class="header">
+            <div class="logo-icon">🍵</div>
+            <h1>ĐĂNG NHẬP</h1>
+            <p>Chào mừng trở lại!</p>
         </div>
-        
-        <!-- Search Box -->
-        <div style="padding: 0 1rem; margin-top: -2rem; position: relative; z-index: 20;">
-            <div class="search-box">
-                <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                </svg>
-                <input type="text" placeholder="Tìm kiếm" id="searchInput">
-            </div>
-        </div>
-        
-        <!-- Main Content Card -->
-        <div class="main-card">
-            <button class="action-btn" id="reportBtn">
-                <div class="icon-box">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                    </svg>
-                </div>
-                <span class="btn-text">Quản lý báo cáo</span>
-            </button>
+
+        <div class="form-container">
+            <div id="errorMessage" class="error-message"></div>
             
-            <button class="action-btn" id="approvalBtn">
-                <div class="icon-box">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                    </svg>
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <div class="input-wrapper">
+                        <span class="input-icon">👤</span>
+                        <input 
+                            type="email" 
+                            class="form-input" 
+                            id="email" 
+                            placeholder="Email"
+                            required
+                        >
+                    </div>
                 </div>
-                <span class="btn-text">Phê duyệt</span>
-            </button>
-        </div>
-        
-        <!-- Bottom Navigation -->
-        <div class="bottom-nav">
-            <div class="nav-container">
-                <button class="nav-btn" id="homeBtn">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
-                    </svg>
-                </button>
-                <button class="nav-btn" id="statsBtn">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
-                    </svg>
-                </button>
-                <button class="nav-btn" id="fingerprintBtn">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4"/>
-                    </svg>
-                </button>
-                <button class="nav-btn" id="profileBtn">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                    </svg>
-                </button>
+
+                <div class="form-group">
+                    <div class="input-wrapper">
+                        <span class="input-icon">🔒</span>
+                        <input 
+                            type="password" 
+                            class="form-input" 
+                            id="password" 
+                            placeholder="Mật khẩu"
+                            required
+                        >
+                        <span class="toggle-password" onclick="togglePassword()">👁️</span>
+                    </div>
+                </div>
+
+                <div class="forgot-password">
+                    <a href="#" onclick="openForgotPasswordModal(); return false;">Quên mật khẩu?</a>
+                </div>
+
+                <button type="submit" class="btn-login">Đăng Nhập</button>
+            </form>
+
+            <div class="divider">
+                <span>HOẶC</span>
             </div>
-            <div class="bottom-indicator"></div>
+
+            <div class="register-link">
+                Chưa có tài khoản? <a href="#" onclick="handleRegister(); return false;">Đăng ký ngay</a>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>© 2025 HR Cloud Solutions</p>
+            <p>
+                <a href="#">[Điều khoản]</a> | 
+                <a href="#">[Chính sách bảo mật]</a>
+            </p>
         </div>
     </div>
-    
+
+    <!-- Modal Quên mật khẩu -->
+    <div id="forgotPasswordModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close" onclick="closeForgotPasswordModal()">&times;</span>
+                <h2>🔑 Quên mật khẩu</h2>
+                <p>Nhập email để nhận link đặt lại mật khẩu</p>
+            </div>
+            <div class="modal-body">
+                <div id="successMessage" class="success-message"></div>
+                <form id="forgotPasswordForm" onsubmit="handleForgotPassword(event)">
+                    <div class="form-group">
+                        <div class="input-wrapper">
+                            <span class="input-icon">📧</span>
+                            <input 
+                                type="email" 
+                                class="form-input" 
+                                id="resetEmail" 
+                                placeholder="Nhập email của bạn"
+                                required
+                            >
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-login">Gửi link đặt lại</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // Action buttons
-        document.getElementById('reportBtn').addEventListener('click', function() {
-            alert('Mở Quản lý báo cáo');
-        });
-        
-        document.getElementById('approvalBtn').addEventListener('click', function() {
-            alert('Mở Phê duyệt');
-        });
-        
-        // Notification button
-        document.querySelector('.notif-btn').addEventListener('click', function() {
-            alert('Thông báo');
-        });
-        
-        // Navigation buttons
-        document.getElementById('homeBtn').addEventListener('click', function() {
-            alert('Trang chủ');
-        });
-        
-        document.getElementById('statsBtn').addEventListener('click', function() {
-            alert('Thống kê');
-        });
-        
-        document.getElementById('fingerprintBtn').addEventListener('click', function() {
-            alert('Vân tay');
-        });
-        
-        document.getElementById('profileBtn').addEventListener('click', function() {
-            alert('Hồ sơ cá nhân');
-        });
-        
-        // Search functionality
-        const searchInput = document.getElementById('searchInput');
-        const actionBtns = document.querySelectorAll('.action-btn');
-        
-        searchInput.addEventListener('input', function(e) {
-            const searchTerm = e.target.value.toLowerCase();
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const toggleIcon = document.querySelector('.toggle-password');
             
-            actionBtns.forEach(btn => {
-                const text = btn.textContent.toLowerCase();
-                if (text.includes(searchTerm)) {
-                    btn.style.display = 'flex';
-                } else {
-                    btn.style.display = 'none';
-                }
-            });
-        });
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.textContent = '🙈';
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.textContent = '👁️';
+            }
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            // Demo validation
+            if (email && password) {
+                // Hiển thị thông báo đăng nhập thành công
+                showMessage('Đăng nhập thành công! Đang chuyển hướng...', 'success');
+                
+                // Chuyển hướng sau 1.5 giây
+                setTimeout(() => {
+                    // Thay đổi URL này thành trang dashboard của bạn
+                    // window.location.href = 'dashboard.html';
+                    alert('Đăng nhập thành công!\n\nEmail: ' + email);
+                }, 1500);
+            } else {
+                showMessage('Vui lòng nhập đầy đủ thông tin!', 'error');
+            }
+        }
+
+        function openForgotPasswordModal() {
+            document.getElementById('forgotPasswordModal').style.display = 'block';
+            document.getElementById('resetEmail').value = '';
+            document.getElementById('successMessage').style.display = 'none';
+        }
+
+        function closeForgotPasswordModal() {
+            document.getElementById('forgotPasswordModal').style.display = 'none';
+        }
+
+        function handleForgotPassword(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('resetEmail').value;
+            
+            if (email) {
+                const successMsg = document.getElementById('successMessage');
+                successMsg.textContent = '✅ Link đặt lại mật khẩu đã được gửi đến email: ' + email;
+                successMsg.style.display = 'block';
+                
+                // Đóng modal sau 3 giây
+                setTimeout(() => {
+                    closeForgotPasswordModal();
+                }, 3000);
+            }
+        }
+
+        function handleRegister() {
+            alert('Chuyển đến trang đăng ký...');
+            // Thay đổi URL này thành trang đăng ký của bạn
+            // window.location.href = 'register.html';
+        }
+
+        function showMessage(message, type) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.className = type === 'error' ? 'error-message' : 'success-message';
+            errorDiv.style.display = 'block';
+            
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+            }, 3000);
+        }
+
+        // Đóng modal khi click bên ngoài
+        window.onclick = function(event) {
+            const modal = document.getElementById('forgotPasswordModal');
+            if (event.target === modal) {
+                closeForgotPasswordModal();
+            }
+        }
     </script>
 </body>
 </html>
